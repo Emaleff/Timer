@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/adaptive.css" />
+    <title>10</title>
+  </head>
+  <body>
+    <main class="container">
+      <div class="title">pomodoro</div>
+      <div class="switchBlock">
+        <div class="switch-item" data-switch="pomodoro">pomodoro</div>
+        <div class="switch-item" data-switch="shortBreak">short break</div>
+        <div class="switch-item" data-switch="longBreak">long break</div>
+      </div>
+      <div class="timer">
+        <div id="container"></div>
+
+        <div class="timer__content">
+          <div class="time">
+            <span class="minutes">00</span>:<span class="seconds">00</span>
+          </div>
+          <div class="timer__actions">START</div>
+        </div>
+      </div>
+      <div class="options">
+        <img src="./images/Shape.svg" id="options" alt="" />
+      </div>
+
+      <div class="menu">
+        <div class="menu__title-block">
+          <div class="menu__title">Settings</div>
+          <img src="./images/close.svg" class="menu__close" alt="" />
+        </div>
+        <div class="menu__options">
+          <div class="menu__time-options">
+            <div class="menu__time-title">TIME (MINUTES)</div>
+            <div class="menu__time-options-block">
+              <div class="menu__time-item">
+                <div class="menu__time-item-title">pomodoro</div>
+                <div class="input-wrapp">
+                  <button
+                    class="number-minus"
+                    type="button"
+                    onclick="this.nextElementSibling.stepDown(); 
+                    // this.nextElementSibling.onchange();
+                    "
+                  >
+                    <img src="./images/under.svg" alt="" />
+                  </button>
+                  <input
+                    type="number"
+                    step="1"
+                    min="1"
+                    max="99"
+                    value="20"
+                    id="inputPomodoro"
+                  />
+                  <button
+                    class="number-plus"
+                    type="button"
+                    onclick="this.previousElementSibling.stepUp(); 
+                    // this.previousElementSibling.onchange();
+                    "
+                  >
+                    <img src="./images/up.svg" alt="" />
+                  </button>
+                </div>
+              </div>
+              <div class="menu__time-item">
+                <div class="menu__time-item-title">short break</div>
+                <div class="input-wrapp">
+                  <button
+                    class="number-minus"
+                    type="button"
+                    onclick="this.nextElementSibling.stepDown();
+                    //  this.nextElementSibling.onchange();
+                     "
+                  >
+                    <img src="./images/under.svg" alt="" />
+                  </button>
+                  <input
+                    type="number"
+                    step="1"
+                    min="1"
+                    max="99"
+                    value=""
+                    id="inputShortBreak"
+                  />
+                  <button
+                    class="number-plus"
+                    type="button"
+                    onclick="this.previousElementSibling.stepUp();
+                    //  this.previousElementSibling.onchange();
+                     "
+                  >
+                    <img src="./images/up.svg" alt="" />
+                  </button>
+                </div>
+              </div>
+              <div class="menu__time-item">
+                <div class="menu__time-item-title">long break</div>
+                <div class="input-wrapp">
+                  <button
+                    class="number-minus"
+                    type="button"
+                    onclick="this.nextElementSibling.stepDown();
+                    //  this.nextElementSibling.onchange();
+                    "
+                  >
+                    <img src="./images/under.svg" alt="" />
+                  </button>
+                  <input
+                    type="number"
+                    step="1"
+                    min="1"
+                    max="99"
+                    value="15"
+                    id="inputLongBreak"
+                  />
+                  <button
+                    class="number-plus"
+                    type="button"
+                    onclick="this.previousElementSibling.stepUp(); 
+                    // this.previousElementSibling.onchange();
+                    "
+                  >
+                    <img src="./images/up.svg" alt="" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="menu__fonts">
+            <div class="menu__fonts-title">FONT</div>
+            <div class="menu__items">
+              <button class="menu__item fonts-item_1" data-font="1">Aa</button>
+              <button class="menu__item fonts-item_2" data-font="2">Aa</button>
+              <button class="menu__item fonts-item_3" data-font="3">Aa</button>
+            </div>
+          </div>
+          <div class="menu__colors">
+            <div class="menu__colors-title">COLOR</div>
+            <div class="menu__items">
+              <button class="menu__item color-item_1" data-color="1"></button>
+              <button class="menu__item color-item_2" data-color="2"></button>
+              <button class="menu__item color-item_3" data-color="3"></button>
+            </div>
+          </div>
+        </div>
+        <button class="btn" id="apply">Apply</button>
+      </div>
+    </main>
+
+    <script src="./progressbar.min.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>

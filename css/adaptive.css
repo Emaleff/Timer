@@ -1,0 +1,77 @@
+@media screen and (max-width: 768px) {
+  .container {
+    padding-top: 80px;
+  }
+}
+@media screen and (max-width: 425px) {
+  .title {
+    font-size: 24px;
+  }
+  .container {
+    padding-top: 32px;
+  }
+  .switchBlock {
+    margin-top: 45px;
+    margin-bottom: 48px;
+  }
+  .timer {
+    width: 300px;
+    height: 300px;
+  }
+  .timer__content {
+    width: 248px;
+    height: 248px;
+  }
+  .time {
+    font-size: 80px;
+  }
+  .timer__actions {
+    bottom: 40px;
+    font-size: 14px;
+  }
+  .KumbhSans .timer__actions {
+    line-height: 14px;
+    letter-spacing: 13px;
+  }
+  .RobotoSlab .timer__actions {
+    line-height: 18px;
+    letter-spacing: 13.125px;
+  }
+  .SpaceMono .timer__actions {
+    line-height: 21px;
+    letter-spacing: 13.125px;
+  }
+  .menu-open .menu {
+    max-width: 90%;
+    width: 95%;
+  }
+  .menu__title-block {
+    padding: 0 24px;
+    height: 72px;
+  }
+  .menu__time-options-block {
+    flex-direction: column;
+  }
+  .menu__time-item {
+    display: flex;
+    width: 100%;
+    margin: 4px 0;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .menu__fonts,
+  .menu__colors {
+    flex-direction: column;
+  }
+  .menu__fonts-title,
+  .menu__colors-title {
+    margin-bottom: 27px;
+  }
+  .switch-item {
+    width: 105px;
+    font-size: 12px;
+  }
+  .switchBlock {
+    width: 95%;
+  }
+}
