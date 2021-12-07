@@ -365,3 +365,14 @@ input[type="number"]::-webkit-inner-spin-button {
 .color3 svg path:last-child {
   stroke: #d881f8;
 }
+.switch-item:hover,
+.timer__actions:hover,
+#options:hover,
+.btn:hover,
+.menu__item:hover,
+.menu:hover {
+  cursor: url(../images/pointer.png) 2 2, pointer;
+}
+.menu__item:hover {
+  opacity: 0.85;
+}

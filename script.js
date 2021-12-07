@@ -158,6 +158,24 @@ function renderMinutes() {
 }
 
 const startApp = () => {
+  if (localStorage.getItem("timerValue") === null) {
+    localStorage.setItem("timerValue", "20");
+  }
+  if (localStorage.getItem("shortTime") === null) {
+    localStorage.setItem("shortTime", "5");
+  }
+  if (localStorage.getItem("longTime") === null) {
+    localStorage.setItem("longTime", "15");
+  }
+  if (localStorage.getItem("switch") === null) {
+    localStorage.setItem("switch", "pomodoro");
+  }
+  if (localStorage.getItem("font") === null) {
+    localStorage.setItem("font", "1");
+  }
+  if (localStorage.getItem("color") === null) {
+    localStorage.setItem("color", "1");
+  }
   inputPomodoro.value = localStorage.getItem("timerValue");
   inputShortBreak.value = localStorage.getItem("shortTime");
   inputLongBreak.value = localStorage.getItem("longTime");
