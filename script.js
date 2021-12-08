@@ -1,3 +1,17 @@
+const rrr = document.getElementById("container");
+var bar = new ProgressBar.Circle(rrr, {
+  strokeWidth: 6,
+  easing: "easeInOut",
+  duration: 1400,
+  // color: localStorage.getItem("currentColor"),
+  trailColor: "transparent",
+  trailWidth: 1,
+  svgStyle: null,
+});
+
+bar.animate(1.0); // Number from 0.0 to 1.0
+// bar.set(1);
+
 let timerID;
 const switchItems = document.querySelectorAll("[data-switch]");
 switchItems.forEach((switchItem) => {
@@ -6,6 +20,7 @@ switchItems.forEach((switchItem) => {
       switchItem.classList.remove("activeSwitch")
     );
     switchItem.classList.add("activeSwitch");
+    localStorage.removeItem("currentSeconds");
     localStorage.setItem("switch", switchItem.dataset.switch);
     clearInterval(timerID);
     timerID = undefined;
@@ -24,40 +39,48 @@ colorItems.forEach((colorItem) => {
     );
     colorItem.classList.add("activeColor");
     localStorage.setItem("color", colorItem.dataset.color);
-    if (colorItem.dataset.color === "1") {
-      container.classList.remove("color3", "color2");
-      container.classList.add("color1");
-      bar.color = "rgba(248, 112, 112, 1)";
-      localStorage.setItem("currentColor", "rgba(248, 112, 112, 1)");
-    } else if (colorItem.dataset.color === "2") {
-      container.classList.remove("color1", "color3");
-      container.classList.add("color2");
-      bar.color = "#70f3f8";
-      localStorage.setItem("currentColor", "#70f3f8");
-    } else {
-      container.classList.remove("color1", "color2");
-      container.classList.add("color3");
-      bar.color = "#d881f8";
-      localStorage.setItem("currentColor", "#d881f8");
-    }
+    changeColorTheme(colorItem.dataset.color);
   });
 });
+
+function changeColorTheme(activeColor) {
+  switch (activeColor) {
+    case "1":
+      container.classList.remove("color3", "color2");
+      container.classList.add("color1");
+      break;
+    case "2":
+      container.classList.remove("color1", "color3");
+      container.classList.add("color2");
+      break;
+    case "3":
+      container.classList.remove("color1", "color2");
+      container.classList.add("color3");
+  }
+}
+function changeFontTheme(activeFont) {
+  switch (activeFont) {
+    case "1":
+      container.classList.remove("RobotoSlab", "SpaceMono");
+      container.classList.add("KumbhSans");
+      break;
+    case "2":
+      container.classList.remove("KumbhSans", "SpaceMono");
+      container.classList.add("RobotoSlab");
+      break;
+    case "3":
+      container.classList.remove("KumbhSans", "RobotoSlab");
+      container.classList.add("SpaceMono");
+      break;
+  }
+}
 const fontItems = document.querySelectorAll("[data-font]");
 fontItems.forEach((fontItem) => {
   fontItem.addEventListener("click", () => {
     fontItems.forEach((fontItem) => fontItem.classList.remove("activeFont"));
     fontItem.classList.add("activeFont");
     localStorage.setItem("font", fontItem.dataset.font);
-    if (fontItem.dataset.font === "1") {
-      container.classList.remove("RobotoSlab", "SpaceMono");
-      container.classList.add("KumbhSans");
-    } else if (fontItem.dataset.font === "2") {
-      container.classList.remove("KumbhSans", "SpaceMono");
-      container.classList.add("RobotoSlab");
-    } else {
-      container.classList.remove("KumbhSans", "RobotoSlab");
-      container.classList.add("SpaceMono");
-    }
+    changeFontTheme(fontItem.dataset.font);
   });
 });
 
@@ -80,7 +103,9 @@ apply.addEventListener("click", () => {
   localStorage.setItem("timerValue", inputPomodoro.value);
   localStorage.setItem("shortTime", inputShortBreak.value);
   localStorage.setItem("longTime", inputLongBreak.value);
-  renderMinutes();
+  if (!timerID) {
+    renderMinutes();
+  }
 });
 const minutes = document.querySelector(".minutes");
 const seconds = document.querySelector(".seconds");
@@ -90,37 +115,75 @@ let currentSeconds;
 function progressSvg(percent) {
   bar.set(percent);
 }
-const startTimer = () => {
-  timerActions.textContent = "PAUSE";
-  const typeTimer = localStorage.getItem("switch");
-  let fullMinutes;
-  if (typeTimer === "pomodoro") {
-    fullMinutes = localStorage.getItem("timerValue");
-  } else if (typeTimer === "shortBreak") {
-    fullMinutes = localStorage.getItem("shortTime");
-  } else if (typeTimer === "longBreak") {
-    fullMinutes = localStorage.getItem("longTime");
-  }
-  let fullSeconds = fullMinutes * 60;
-  if (currentSeconds === 0) {
-    clearInterval(timerID);
-    timerActions.textContent = "RESTART";
-    var audio = new Audio(); // Создаём новый элемент Audio
-    audio.src = "./Radar-1.mp3"; // Указываем путь к звуку "клика"
-    audio.autoplay = true; // Автоматически запускаем
-
-    currentSeconds = null;
-    minutes.textContent = "00";
-    seconds.textContent = "00";
-  } else if (!currentSeconds) {
-    currentSeconds = fullSeconds;
+function startTimer() {
+  if (localStorage.getItem("currentSeconds")) {
+    timerActions.textContent = "PAUSE";
+    currentSeconds = localStorage.getItem("currentSeconds");
+    if (currentSeconds <= 0) {
+      clearInterval(timerID);
+      console.log("work");
+      timerActions.textContent = "RESTART";
+      var audio = new Audio(); // Создаём новый элемент Audio
+      audio.src = "./Radar-1.mp3"; // Указываем путь к звуку "клика"
+      audio.autoplay = true; // Автоматически запускаем
+      currentSeconds = null;
+      minutes.textContent = "00";
+      seconds.textContent = "00";
+      localStorage.removeItem("currentSeconds");
+      timerID = undefined;
+    } else if (!currentSeconds) {
+      currentSeconds = fullSeconds;
+    } else {
+      currentSeconds--;
+      localStorage.setItem("currentSeconds", currentSeconds);
+    }
+    let fullSeconds;
+    const typeTimer = localStorage.getItem("switch");
+    if (typeTimer === "pomodoro") {
+      fullSeconds = localStorage.getItem("timerValue") * 60;
+    } else if (typeTimer === "shortBreak") {
+      fullSeconds = localStorage.getItem("shortTime") * 60;
+    } else if (typeTimer === "longBreak") {
+      fullSeconds = localStorage.getItem("longTime") * 60;
+    }
+    let percent = currentSeconds / fullSeconds;
+    progressSvg(percent);
+    renderCurrentTime(currentSeconds);
+    return;
   } else {
-    currentSeconds--;
+    timerActions.textContent = "PAUSE";
+    const typeTimer = localStorage.getItem("switch");
+    let fullMinutes;
+    if (typeTimer === "pomodoro") {
+      fullMinutes = localStorage.getItem("timerValue");
+    } else if (typeTimer === "shortBreak") {
+      fullMinutes = localStorage.getItem("shortTime");
+    } else if (typeTimer === "longBreak") {
+      fullMinutes = localStorage.getItem("longTime");
+    }
+    let fullSeconds = fullMinutes * 60;
+    if (currentSeconds === 0) {
+      clearInterval(timerID);
+      timerActions.textContent = "RESTART";
+      var audio = new Audio(); // Создаём новый элемент Audio
+      audio.src = "./Radar-1.mp3"; // Указываем путь к звуку "клика"
+      audio.autoplay = true; // Автоматически запускаем
+
+      currentSeconds = null;
+      minutes.textContent = "00";
+      seconds.textContent = "00";
+      localStorage.removeItem("currentSeconds");
+    } else if (!currentSeconds) {
+      currentSeconds = fullSeconds;
+    } else {
+      currentSeconds--;
+      localStorage.setItem("currentSeconds", currentSeconds);
+    }
+    let percent = currentSeconds / fullSeconds;
+    progressSvg(percent);
+    renderCurrentTime(currentSeconds);
   }
-  let percent = currentSeconds / fullSeconds;
-  progressSvg(percent);
-  renderCurrentTime(currentSeconds);
-};
+}
 
 function renderCurrentTime(getSeconds) {
   let fullSeconds = getSeconds;
@@ -137,24 +200,41 @@ function renderCurrentTime(getSeconds) {
   }
 }
 timerActions.addEventListener("click", () => {
-  if (timerID) {
+  if (localStorage.getItem("currentSeconds") && !timerID) {
+    timerID = setInterval(startTimer, 1000);
+  } else if (localStorage.getItem("currentSeconds") && timerID) {
     clearInterval(timerID);
     timerID = undefined;
     timerActions.textContent = "START";
-  } else {
+  } else if (!localStorage.getItem("currentSeconds") && !timerID) {
     timerID = setInterval(startTimer, 1000);
+  } else {
   }
+  // if (timerID) {
+  //   clearInterval(timerID);
+  //   timerID = undefined;
+  //   timerActions.textContent = "START";
+  // } else {
+  //   timerID = setInterval(startTimer, 1000);
+  // }
 });
-function renderMinutes() {
+function renderMinutes(lastTimerTime) {
   let activeSwitch = localStorage.getItem("switch");
-  if (activeSwitch === "pomodoro") {
-    minutes.textContent = localStorage.getItem("timerValue");
-  } else if (activeSwitch === "shortBreak") {
-    minutes.textContent = localStorage.getItem("shortTime");
-  } else if (activeSwitch === "longBreak") {
-    minutes.textContent = localStorage.getItem("longTime");
+  if (!lastTimerTime) {
+    if (activeSwitch === "pomodoro") {
+      minutes.textContent = localStorage.getItem("timerValue");
+    } else if (activeSwitch === "shortBreak") {
+      minutes.textContent = localStorage.getItem("shortTime");
+    } else if (activeSwitch === "longBreak") {
+      minutes.textContent = localStorage.getItem("longTime");
+    }
+    seconds.textContent = "00";
+  } else {
+    let min = Math.floor(lastTimerTime / 60);
+    minutes.textContent = min;
+    seconds.textContent = lastTimerTime - min * 60;
+    return;
   }
-  seconds.textContent = "00";
 }
 
 const startApp = () => {
@@ -218,20 +298,32 @@ const startApp = () => {
       switchItem.classList.add("activeSwitch");
     }
   });
+
+  if (localStorage.getItem("currentSeconds")) {
+    let currentSeconds = localStorage.getItem("currentSeconds");
+    renderMinutes(currentSeconds);
+    startSvg();
+
+    return;
+  }
   renderMinutes();
 };
+function startSvg() {
+  if (localStorage.getItem("currentSeconds")) {
+    let currentSeconds = localStorage.getItem("currentSeconds");
+    // renderMinutes(currentSeconds);
+
+    let fullSeconds2;
+    let typeTimer = localStorage.getItem("switch");
+    if (typeTimer === "pomodoro") {
+      fullSeconds2 = localStorage.getItem("timerValue") * 60;
+    } else if (typeTimer === "shortBreak") {
+      fullSeconds2 = localStorage.getItem("shortTime") * 60;
+    } else if (typeTimer === "longBreak") {
+      fullSeconds2 = localStorage.getItem("longTime") * 60;
+    }
+    let percent2 = currentSeconds / fullSeconds2;
+    progressSvg(percent2);
+  }
+}
 startApp();
-
-const rrr = document.getElementById("container");
-var bar = new ProgressBar.Circle(rrr, {
-  strokeWidth: 6,
-  easing: "easeInOut",
-  duration: 1400,
-  // color: localStorage.getItem("currentColor"),
-  trailColor: "transparent",
-  trailWidth: 1,
-  svgStyle: null,
-});
-
-bar.animate(1.0); // Number from 0.0 to 1.0
-bar.set(1);
