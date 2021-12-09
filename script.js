@@ -210,12 +210,15 @@ function renderCurrentTime(getSeconds) {
 timerActions.addEventListener("click", () => {
   if (localStorage.getItem("currentSeconds") && !timerID) {
     timerID = setInterval(startTimer, 1000);
+    localStorage.setItem("timerOptions", "play");
   } else if (localStorage.getItem("currentSeconds") && timerID) {
     clearInterval(timerID);
     timerID = undefined;
     timerActions.textContent = "START";
+    localStorage.setItem("timerOptions", "pause");
   } else if (!localStorage.getItem("currentSeconds") && !timerID) {
     timerID = setInterval(startTimer, 1000);
+    localStorage.setItem("timerOptions", "play");
   } else {
   }
 });
@@ -303,7 +306,9 @@ const startApp = () => {
   if (localStorage.getItem("currentSeconds")) {
     let currentSeconds = localStorage.getItem("currentSeconds");
     renderMinutes(currentSeconds);
-    timerID = setInterval(startTimer, 1000);
+    if (localStorage.getItem("timerOptions") === "play") {
+      timerID = setInterval(startTimer, 1000);
+    }
 
     startSvg();
 
