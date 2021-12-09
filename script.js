@@ -103,9 +103,17 @@ apply.addEventListener("click", () => {
   localStorage.setItem("timerValue", inputPomodoro.value);
   localStorage.setItem("shortTime", inputShortBreak.value);
   localStorage.setItem("longTime", inputLongBreak.value);
-  if (!timerID) {
-    renderMinutes();
-  }
+  // if (!timerID) {
+  //   renderMinutes();
+  // }
+  clearInterval(timerID);
+  timerID = undefined;
+  currentSeconds = undefined;
+  timerActions.textContent = "START";
+  progressSvg(1);
+  renderMinutes();
+  localStorage.removeItem("currentSeconds");
+  startSvg();
 });
 const minutes = document.querySelector(".minutes");
 const seconds = document.querySelector(".seconds");
@@ -210,13 +218,6 @@ timerActions.addEventListener("click", () => {
     timerID = setInterval(startTimer, 1000);
   } else {
   }
-  // if (timerID) {
-  //   clearInterval(timerID);
-  //   timerID = undefined;
-  //   timerActions.textContent = "START";
-  // } else {
-  //   timerID = setInterval(startTimer, 1000);
-  // }
 });
 function renderMinutes(lastTimerTime) {
   let activeSwitch = localStorage.getItem("switch");
@@ -302,6 +303,8 @@ const startApp = () => {
   if (localStorage.getItem("currentSeconds")) {
     let currentSeconds = localStorage.getItem("currentSeconds");
     renderMinutes(currentSeconds);
+    timerID = setInterval(startTimer, 1000);
+
     startSvg();
 
     return;
